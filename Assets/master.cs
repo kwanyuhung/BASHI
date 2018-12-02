@@ -50,6 +50,16 @@ public class master : MonoBehaviour {
     public int[] TScoreBoard = new int[9];
 
 
+    //button
+    public GameObject PauseButton;
+
+    public Sprite Pause;
+    public Sprite play;
+
+
+    bool PClick = false;
+
+
     public enum Boxcolor{
         red,
         green,
@@ -93,7 +103,7 @@ public class master : MonoBehaviour {
             if (!gameEnd)
             {
                 Timer -= Time.deltaTime;
-                timeUI.text = "Time \n" + Timer.ToString("0.0");
+                timeUI.text = "Time " + Timer.ToString("0.0");
                 if (Timer <= 0)
                 {
                     YouLose();
@@ -396,5 +406,23 @@ public class master : MonoBehaviour {
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
         SceneManager.LoadScene(0);
+    }
+
+    public void PauseClick()
+    {
+        if (PClick == true)
+        {
+            PClick = false;
+            PauseButton.GetComponent<Image>().sprite = Pause;
+            Time.timeScale = 1;
+            closeButton(true);
+        }
+        else
+        {
+            PClick = true;
+            PauseButton.GetComponent<Image>().sprite = play;
+            Time.timeScale = 0;
+            closeButton(false);
+        }
     }
 }
