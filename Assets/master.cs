@@ -37,6 +37,8 @@ public class master : MonoBehaviour {
     bool gameEnd = false;
 
     public AudioClip DestorySound;
+    public AudioClip FailSound;
+    public AudioClip GameOverSound;
 
     public int mode  = 3;
 
@@ -171,6 +173,7 @@ public class master : MonoBehaviour {
             {
                 YouLose();
             }
+            this.gameObject.GetComponent<AudioSource>().PlayOneShot(FailSound, 0.7f);
         }
         else
         {
@@ -213,6 +216,7 @@ public class master : MonoBehaviour {
 
     public void YouLose()
     {
+        this.gameObject.GetComponent<AudioSource>().PlayOneShot(GameOverSound, 2.0f);
         gameEnd = true;
         LoseUI.SetActive(true);
         if (Rush == true)
@@ -371,10 +375,11 @@ public class master : MonoBehaviour {
 
         fail = 0;
         Stage += 1;
-        Timer += 15;
+        Timer += 8;
         boxSize += 5;
         gameEnd = false;
         WinUI.SetActive(false);
+        StageOBJ.SetActive(false);
         stageUI.gameObject.SetActive(false);
         closeButton(true);
         point.transform.position = savePoint.transform.position;

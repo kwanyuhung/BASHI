@@ -1553,9 +1553,12 @@ MonoBehaviour:
   stageUI: {fileID: 1037559345}
   StageOBJ: {fileID: 608717645}
   DestorySound: {fileID: 8300000, guid: e7c7178d7bc4afc4bba8a480f01e7306, type: 3}
+  FailSound: {fileID: 8300000, guid: e1baa89ab91bf7e43901fda4ad65fc55, type: 3}
+  GameOverSound: {fileID: 8300000, guid: 1597045622a8a8c4bb48fb0693b8d2f6, type: 3}
   mode: 3
   Rush: 0
-  startUI: {fileID: 0}
+  RScoreBoard: 000000000000000000000000000000000000000000000000000000000000000000000000
+  TScoreBoard: 000000000000000000000000000000000000000000000000000000000000000000000000
 --- !u!82 &801433368
 AudioSource:
   m_ObjectHideFlags: 0
