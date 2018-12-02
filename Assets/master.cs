@@ -27,14 +27,26 @@ public class master : MonoBehaviour {
     public int maxFail = 5;
 
     public int Stage = 0;
+    public int BreakBox = 0;
 
     public GameObject WinUI;
     public GameObject LoseUI;
     public TextMeshProUGUI stageUI;
+    public GameObject StageOBJ;
 
     bool gameEnd = false;
 
     public AudioClip DestorySound;
+
+    public int mode  = 3;
+
+    public bool Rush = false;
+
+
+    public int[] RScoreBoard = new int[9];
+
+    public int[] TScoreBoard = new int[9];
+
 
     public enum Boxcolor{
         red,
@@ -43,23 +55,63 @@ public class master : MonoBehaviour {
     }
     
 
+    void PreLoad()
+    {
+        for (int i = 0; i < RScoreBoard.Length; i++)
+        {
+            RScoreBoard[i] = PlayerPrefs.GetInt("Rsocore" + i, RScoreBoard[i]);
+        }
+        for (int i = 0; i < TScoreBoard.Length; i++)
+        {
+            TScoreBoard[i] = PlayerPrefs.GetInt("Tsocore" + i, TScoreBoard[i]);
+        }
+    }
+
 	void Start () {
+        PreLoad();
+        mode = PlayerPrefs.GetInt("mode", mode);
+        Debug.Log("mode == " + mode);
+        if (mode == 0)
+        {
+            Rush = true;
+        }
+        else
+        {
+            boxSize = 100;
+            Timer = 30;
+            Rush = false;
+        }
         Create();
     }
 
     void Update()
     {
-        if (!gameEnd)
+        if (Rush == true)
         {
-            Timer -= Time.deltaTime;
-            timeUI.text = "Time \n" + Timer.ToString("0.0");
-            if (Timer <= 0)
+            if (!gameEnd)
             {
-                YouLose();
+                Timer -= Time.deltaTime;
+                timeUI.text = "Time \n" + Timer.ToString("0.0");
+                if (Timer <= 0)
+                {
+                    YouLose();
+                }
+                if (Colorbox.Count == 0)
+                {
+                    YouWin();
+                }
             }
-            if(Colorbox.Count == 0)
+        }
+        else // time Attack
+        {
+            if (!gameEnd)
             {
-                YouWin();
+                Timer -= Time.deltaTime;
+                timeUI.text = "Time \n" + Timer.ToString("0.0");
+                if (Timer <= 0)
+                {
+                    YouLose();
+                }
             }
         }
     }
@@ -76,15 +128,17 @@ public class master : MonoBehaviour {
             switch (Randomcolor())
             {
                 case 0: //red
-                    B.GetComponent<Image>().color = new Color32(255,95,95,255);
+                    //B.GetComponent<Image>().color = new Color32(255,95,95,255);
+                    B.gameObject.GetComponent<Animator>().Play("red");
                     B.GetComponent<mycolor>().color = Boxcolor.red;
                     break;
                 case 1: // green
-                    B.GetComponent<Image>().color = new Color32(136, 255, 136,255);
+                    B.gameObject.GetComponent<Animator>().Play("green");
                     B.GetComponent<mycolor>().color = Boxcolor.green;
                     break;
                 case 2: // blue
                     B.GetComponent<Image>().color = new Color32(136, 136, 255,255);
+                    B.gameObject.GetComponent<Animator>().Play("blue");
                     B.GetComponent<mycolor>().color = Boxcolor.blue;
                     break;
 
@@ -111,15 +165,33 @@ public class master : MonoBehaviour {
     public void UpdateFail()
     {
         failUI.text = "Fail \n" + fail;
-        if(fail >= 5)
+        if (Rush == true)
         {
-            YouLose();
+            if (fail >= 5)
+            {
+                YouLose();
+            }
+        }
+        else
+        {
+            if (fail >= 1)
+            {
+                YouLose();
+            }
         }
     }
     public void UpdateStage()
     {
+        StageOBJ.SetActive(true);
         stageUI.gameObject.SetActive(true);
-        stageUI.text = "Stage " + Stage;
+        if (Rush == true)
+        {
+            stageUI.text = "Stage " + Stage;
+        }
+        else
+        {
+            stageUI.text = "BreakBox : " + BreakBox;
+        }
     }
 
     public void closeButton(bool close)
@@ -143,13 +215,104 @@ public class master : MonoBehaviour {
     {
         gameEnd = true;
         LoseUI.SetActive(true);
+        if (Rush == true)
+        {
+            SaveRecord(Stage);
+        }
+        else
+        {
+            SaveRecord(BreakBox);
+            LoseUI.GetComponent<TextMeshProUGUI>().text = "Game End";
+        }
         UpdateStage();
         closeButton(false);
+
+        
     }
+
+    /// <summary>
+    /// save
+    /// </summary>
+    /// <param name="higherscore"></param>
+
+    public void SaveRecord(int higherscore)
+    {
+        if (Rush == true)
+        {
+            for (int i = 0; i < RScoreBoard.Length; i++)
+            {
+                if (higherscore >= RScoreBoard[i])
+                {
+                    Debug.Log("move down");
+                    MoveDownD(i, higherscore);
+                    SaveData();
+                    return;
+                }
+            }
+        }
+        else
+        {
+            for (int i = 0; i < TScoreBoard.Length; i++)
+            {
+                if (higherscore >= TScoreBoard[i])
+                {
+                    Debug.Log("move down");
+                    MoveDownD(i, higherscore);
+                    SaveData();
+                    return;
+                }
+            }
+        }
+    }
+
+    void SaveData()
+    {
+        if (Rush  == true)
+        {
+            for (int i = 0; i < RScoreBoard.Length; i++)
+            {
+                PlayerPrefs.SetInt("Rsocore" + i, RScoreBoard[i]);
+                
+            }
+        }
+        else
+        {
+            for (int i = 0; i < TScoreBoard.Length; i++)
+            {
+                PlayerPrefs.SetInt("Tsocore" + i, TScoreBoard[i]);
+            }
+        }
+        PlayerPrefs.Save();
+    }
+
+    void MoveDownD(int numberofscore, int score)
+    {
+        if (Rush == true)
+        {
+            for (int i = RScoreBoard.Length - 1; i >= 1; i--)
+            {
+                RScoreBoard[i] = RScoreBoard[i - 1];
+            }
+            RScoreBoard[numberofscore] = score;
+        }
+        else
+        {
+            for (int i = TScoreBoard.Length - 1; i >= 1; i--)
+            {
+                TScoreBoard[i] = TScoreBoard[i - 1];
+            }
+            TScoreBoard[numberofscore] = score;
+        }
+    }
+    /// <summary>
+    /// save 
+    /// </summary>
+    /// <param name="G"></param>
 
 
     public void RemoveBox(GameObject G)
     {
+        BreakBox += 1;
         this.gameObject.GetComponent<AudioSource>().PlayOneShot(DestorySound, 0.7f);
         Destroy(G);
         Colorbox.Remove(G);
@@ -222,5 +385,11 @@ public class master : MonoBehaviour {
     public void Restart()
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+    }
+
+    public void BackMenu()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        SceneManager.LoadScene(0);
     }
 }
