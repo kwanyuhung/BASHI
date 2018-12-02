@@ -1,0 +1,48 @@
+Base path: C:/Program Files/Unity/Editor/Data
+Pipe name: \\.\pipe\UnityShaderCompiler-64bit-1-10744
+Cmd: getPlatforms
+Cmd: preprocess
+  insize=3466 outsize=1242 ok=1
+Cmd: compileSnippet
+  error: 2 plat 4 at (100): undeclared identifier 'UnityObjectToClipPos'\nCompiling Vertex program
+  api=4 type=0 insize=2528 outsize=0 kw= ok=0
+Cmd: preprocess
+  insize=3508 outsize=1639 ok=1
+Cmd: compileSnippet
+  error: 2 plat 4 at (91): undeclared identifier 'UnityObjectToClipPos'\nCompiling Vertex program
+  api=4 type=0 insize=2173 outsize=0 kw= ok=0
+Cmd: preprocess
+  insize=3464 outsize=1289 ok=1
+Cmd: compileSnippet
+  error: 2 plat 4 at (101): undeclared identifier 'UnityObjectToClipPos'\nCompiling Vertex program
+  api=4 type=0 insize=2479 outsize=0 kw= ok=0
+Cmd: preprocess
+  error: 2 plat 16 at (125): Can't find include file UnityUI.cginc
+  insize=10047 outsize=3870 ok=0
+Cmd: preprocess
+  insize=3433 outsize=2610 ok=1
+Cmd: compileSnippet
+  error: 2 plat 4 at TMPro_Surface.cginc(18): undeclared identifier 'UnityObjectToClipPos'\nCompiling Vertex program with DIRECTIONAL LIGHTMAP_OFF DIRLIGHTMAP_OFF DYNAMICLIGHTMAP_OFF
+  api=4 type=0 insize=15926 outsize=0 kw=DIRECTIONAL LIGHTMAP_OFF DIRLIGHTMAP_OFF DYNAMICLIGHTMAP_OFF ok=0
+Cmd: preprocess
+  error: 2 plat 16 at (91): Can't find include file UnityUI.cginc
+  insize=7090 outsize=2394 ok=0
+Cmd: preprocess
+  error: 2 plat 16 at (97): Can't find include file UnityUI.cginc
+  insize=7715 outsize=2661 ok=0
+Cmd: preprocess
+  error: 2 plat 16 at (54): Can't find include file UnityUI.cginc
+  insize=2307 outsize=1109 ok=0
+Cmd: preprocess
+  error: 2 plat 16 at (125): Can't find include file UnityUI.cginc
+  insize=10039 outsize=3859 ok=0
+Cmd: preprocess
+  error: 2 plat 1 at /TMPro_Surface.cginc(91): undefined variable "unity_ObjectToWorld"
+  insize=4252 outsize=4090 ok=0
+Cmd: preprocess
+  error: 2 plat 16 at (91): Can't find include file UnityUI.cginc
+  insize=7098 outsize=2404 ok=0
+Unhandled exception: Readfile from pipe failed. GLE=管道已結束。
+
+
+Quitting shader compiler process
