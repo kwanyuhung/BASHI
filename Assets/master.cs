@@ -112,6 +112,7 @@ public class master : MonoBehaviour {
     {
         if (StartWait == true)
         {
+            timeUI.text = "Time " + Timer.ToString("0.0");
             closeButton(false);
             SWaitTIme.SetActive(true);
             StartWaitTimer -= Time.deltaTime;
@@ -128,18 +129,18 @@ public class master : MonoBehaviour {
         {
             if (Rush == true)
             {
-                    if (!gameEnd)
+                if (!gameEnd)
+                {
+                    Timer -= Time.deltaTime;
+                    timeUI.text = "Time " + Timer.ToString("0.0");
+                    if (Timer <= 0)
                     {
-                        Timer -= Time.deltaTime;
-                        timeUI.text = "Time " + Timer.ToString("0.0");
-                        if (Timer <= 0)
-                        {
-                            YouLose();
-                        }
-                        if (Colorbox.Count == 0)
-                        {
-                            YouWin();
-                        }
+                        YouLose();
+                    }
+                    if (Colorbox.Count == 0)
+                    {
+                        YouWin();
+                    }
 
                     if (LockWait == true)
                     {
@@ -277,13 +278,17 @@ public class master : MonoBehaviour {
         WinUI.SetActive(true);
         UpdateStage();
         closeButton(false);
+        PauseButton.SetActive(false);
+        
     }
 
     public void YouLose()
     {
+        Destroy(Cross.gameObject);
         this.gameObject.GetComponent<AudioSource>().PlayOneShot(GameOverSound, 2.0f);
         gameEnd = true;
         LoseUI.SetActive(true);
+        PauseButton.SetActive(false);
         if (Rush == true)
         {
             SaveRecord(Stage);
@@ -394,9 +399,9 @@ public class master : MonoBehaviour {
         {
             if (Colorbox[0].GetComponent<mycolor>().color == Boxcolor.red)
             {
-                Vector3 V = new Vector3(0, DestoryPoint.position.y - 30, DestoryPoint.position.z);
+                Vector3 V = new Vector3(DestoryPoint.position.x, DestoryPoint.position.y , DestoryPoint.position.z);
                 GameObject DB = Instantiate(DestoryBox, V, Quaternion.identity);
-                DB.transform.SetParent(UI.transform, false);
+                DB.transform.SetParent(DestoryPoint.transform);
                 DB.transform.localScale = new Vector3(1, 1, 1);
                 RemoveBox(Colorbox[0]);
             }
@@ -414,9 +419,9 @@ public class master : MonoBehaviour {
         {
             if (Colorbox[0].GetComponent<mycolor>().color == Boxcolor.green)
             {
-                Vector3 V = new Vector3(0, DestoryPoint.position.y - 30, DestoryPoint.position.z);
+                Vector3 V = new Vector3(DestoryPoint.position.x, DestoryPoint.position.y, DestoryPoint.position.z);
                 GameObject DB = Instantiate(DestoryBox, V, Quaternion.identity);
-                DB.transform.SetParent(UI.transform, false);
+                DB.transform.SetParent(DestoryPoint.transform);
                 DB.transform.localScale = new Vector3(1, 1, 1);
                 DB.GetComponent<Image>().sprite = DestoryGreen;
                 RemoveBox(Colorbox[0]);
@@ -433,9 +438,9 @@ public class master : MonoBehaviour {
 
         if (Colorbox[0].GetComponent<mycolor>().color == Boxcolor.blue)
         {
-            Vector3 V = new Vector3(0, DestoryPoint.position.y-30, DestoryPoint.position.z);
+            Vector3 V = new Vector3(DestoryPoint.position.x, DestoryPoint.position.y, DestoryPoint.position.z);
             GameObject DB = Instantiate(DestoryBox, V, Quaternion.identity);
-            DB.transform.SetParent(UI.transform, false);
+            DB.transform.SetParent(DestoryPoint.transform);
             DB.transform.localScale = new Vector3(1, 1, 1);
             DB.GetComponent<Image>().sprite = DestoryBlue;
             RemoveBox(Colorbox[0]);
@@ -459,6 +464,7 @@ public class master : MonoBehaviour {
         StageOBJ.SetActive(false);
         stageUI.gameObject.SetActive(false);
         closeButton(true);
+        PauseButton.SetActive(true);
         point.transform.position = savePoint.transform.position;
         Colorbox.Clear();
         Create();
