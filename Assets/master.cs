@@ -40,7 +40,7 @@ public class master : MonoBehaviour {
     public AudioClip FailSound;
     public AudioClip GameOverSound;
 
-    public int mode  = 3;
+    public int mode = 3;
 
     public bool Rush = false;
 
@@ -56,16 +56,28 @@ public class master : MonoBehaviour {
     public Sprite Pause;
     public Sprite play;
 
-
     bool PClick = false;
 
+    public GameObject SWaitTIme;
+    bool StartWait = true;
+    float StartWaitTimer = 3;
 
-    public enum Boxcolor{
+    bool LockWait = false;
+    float Locktime = 1.0f;
+
+    public GameObject Cross;
+
+    public Transform DestoryPoint;
+    public GameObject DestoryBox;
+    public Sprite DestoryGreen;
+    public Sprite DestoryBlue;
+
+    public enum Boxcolor {
         red,
         green,
         blue,
     }
-    
+
 
     void PreLoad()
     {
@@ -79,7 +91,7 @@ public class master : MonoBehaviour {
         }
     }
 
-	void Start () {
+    void Start() {
         PreLoad();
         mode = PlayerPrefs.GetInt("mode", mode);
         Debug.Log("mode == " + mode);
@@ -98,32 +110,65 @@ public class master : MonoBehaviour {
 
     void Update()
     {
-        if (Rush == true)
+        if (StartWait == true)
         {
-            if (!gameEnd)
+            closeButton(false);
+            SWaitTIme.SetActive(true);
+            StartWaitTimer -= Time.deltaTime;
+            SWaitTIme.transform.GetComponent<TextMeshProUGUI>().text = (int)StartWaitTimer + 1 + "!";
+            if (StartWaitTimer < 0)
             {
-                Timer -= Time.deltaTime;
-                timeUI.text = "Time " + Timer.ToString("0.0");
-                if (Timer <= 0)
-                {
-                    YouLose();
-                }
-                if (Colorbox.Count == 0)
-                {
-                    YouWin();
-                }
+                StartWaitTimer = 3;
+                StartWait = false;
+                closeButton(true);
+                SWaitTIme.SetActive(false);
             }
         }
-        else // time Attack
+        else
         {
-            if (!gameEnd)
+            if (Rush == true)
             {
-                Timer -= Time.deltaTime;
-                timeUI.text = "Time \n" + Timer.ToString("0.0");
-                if (Timer <= 0)
-                {
-                    YouLose();
+                    if (!gameEnd)
+                    {
+                        Timer -= Time.deltaTime;
+                        timeUI.text = "Time " + Timer.ToString("0.0");
+                        if (Timer <= 0)
+                        {
+                            YouLose();
+                        }
+                        if (Colorbox.Count == 0)
+                        {
+                            YouWin();
+                        }
+
+                    if (LockWait == true)
+                    {
+
+                        Cross.SetActive(true);
+                        closeButton(false);
+                        Locktime -= Time.deltaTime;
+                        if (Locktime <= 0)
+                        {
+                            Cross.SetActive(false);
+                            LockWait = false;
+                            Locktime = 1.0f;
+                            closeButton(true);
+                        }
+                    }
                 }
+            }
+            else // time Attack
+            {
+                if (!gameEnd)
+                {
+                    Timer -= Time.deltaTime;
+                    timeUI.text = "Time \n" + Timer.ToString("0.0");
+                    if (Timer <= 0)
+                    {
+                        YouLose();
+                    }
+                }
+
             }
         }
     }
@@ -149,7 +194,7 @@ public class master : MonoBehaviour {
                     B.GetComponent<mycolor>().color = Boxcolor.green;
                     break;
                 case 2: // blue
-                    B.GetComponent<Image>().color = new Color32(136, 136, 255,255);
+                    //B.GetComponent<Image>().color = new Color32(136, 136, 255,255);
                     B.gameObject.GetComponent<Animator>().Play("blue");
                     B.GetComponent<mycolor>().color = Boxcolor.blue;
                     break;
@@ -174,16 +219,26 @@ public class master : MonoBehaviour {
         }
     }
 
+    void LockBox()
+    {
+        LockWait = true;
+    }
+
     public void UpdateFail()
     {
-        failUI.text = "Fail \n" + fail;
+        fail += 1;
+        failUI.text = "Fail " + fail;
         if (Rush == true)
         {
             if (fail >= 5)
             {
                 YouLose();
             }
-            this.gameObject.GetComponent<AudioSource>().PlayOneShot(FailSound, 0.7f);
+            else
+            {
+                LockBox();
+                this.gameObject.GetComponent<AudioSource>().PlayOneShot(FailSound, 0.7f);
+            }
         }
         else
         {
@@ -339,11 +394,14 @@ public class master : MonoBehaviour {
         {
             if (Colorbox[0].GetComponent<mycolor>().color == Boxcolor.red)
             {
+                Vector3 V = new Vector3(0, DestoryPoint.position.y - 30, DestoryPoint.position.z);
+                GameObject DB = Instantiate(DestoryBox, V, Quaternion.identity);
+                DB.transform.SetParent(UI.transform, false);
+                DB.transform.localScale = new Vector3(1, 1, 1);
                 RemoveBox(Colorbox[0]);
             }
             else
             {
-                fail += 1;
                 UpdateFail();
             }
         }
@@ -356,11 +414,15 @@ public class master : MonoBehaviour {
         {
             if (Colorbox[0].GetComponent<mycolor>().color == Boxcolor.green)
             {
+                Vector3 V = new Vector3(0, DestoryPoint.position.y - 30, DestoryPoint.position.z);
+                GameObject DB = Instantiate(DestoryBox, V, Quaternion.identity);
+                DB.transform.SetParent(UI.transform, false);
+                DB.transform.localScale = new Vector3(1, 1, 1);
+                DB.GetComponent<Image>().sprite = DestoryGreen;
                 RemoveBox(Colorbox[0]);
             }
             else
             {
-                fail += 1;
                 UpdateFail();
             }
         }
@@ -371,11 +433,15 @@ public class master : MonoBehaviour {
 
         if (Colorbox[0].GetComponent<mycolor>().color == Boxcolor.blue)
         {
+            Vector3 V = new Vector3(0, DestoryPoint.position.y-30, DestoryPoint.position.z);
+            GameObject DB = Instantiate(DestoryBox, V, Quaternion.identity);
+            DB.transform.SetParent(UI.transform, false);
+            DB.transform.localScale = new Vector3(1, 1, 1);
+            DB.GetComponent<Image>().sprite = DestoryBlue;
             RemoveBox(Colorbox[0]);
         }
         else
         {
-            fail += 1;
             UpdateFail();
         }
     }
@@ -388,6 +454,7 @@ public class master : MonoBehaviour {
         Timer += 8;
         boxSize += 5;
         gameEnd = false;
+        StartWait = true;
         WinUI.SetActive(false);
         StageOBJ.SetActive(false);
         stageUI.gameObject.SetActive(false);
