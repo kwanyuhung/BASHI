@@ -1,0 +1,15 @@
+﻿<Properties StartupConfiguration="{29DBABDE-C57B-4D18-41E5-CAEC3F3E19BE}|">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/master.cs">
+    <Files>
+      <File FileName="Assets/startUI.cs" Line="55" Column="6" />
+      <File FileName="Assets/master.cs" Line="39" Column="27" />
+    </Files>
+  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.ItemProperties.Assembly-CSharp PreferredExecutionTarget="Unity.Editor" />
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore />
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MultiItemStartupConfigurations />
+</Properties>

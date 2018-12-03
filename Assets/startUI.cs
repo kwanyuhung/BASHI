@@ -29,7 +29,7 @@ public class startUI : MonoBehaviour {
             ScoreHeader.text = "Rush";
             for(int i = 0; i< RScoreBoard.Length; i++)
             {
-                ScoreText.text += (i + 1) + ")  Stage" + RScoreBoard[i] + "\n";
+                ScoreText.text += (i + 1) + ")  Stage " + RScoreBoard[i] + "\n";
             }
             IsSave = 1;
         }
@@ -38,7 +38,7 @@ public class startUI : MonoBehaviour {
             ScoreHeader.text = "Time Attack";
             for (int i = 0; i < TScoreBoard.Length; i++)
             {
-                ScoreText.text += (i + 1) + ")  Break" + TScoreBoard[i] + "\n";
+                ScoreText.text += (i + 1) + ")  Break " + TScoreBoard[i] + "\n";
             }
         }
         if(ScoreSelectClick == false)

@@ -89,7 +89,7 @@ public class master : MonoBehaviour {
         }
         else
         {
-            boxSize = 100;
+            boxSize = 200;
             Timer = 30;
             Rush = false;
         }
@@ -399,11 +399,13 @@ public class master : MonoBehaviour {
 
     public void Restart()
     {
+        Time.timeScale = 1;
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 
     public void BackMenu()
     {
+        Time.timeScale = 1;
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
         SceneManager.LoadScene(0);
     }
@@ -414,6 +416,7 @@ public class master : MonoBehaviour {
         {
             PClick = false;
             PauseButton.GetComponent<Image>().sprite = Pause;
+            PauseButton.transform.GetChild(0).gameObject.SetActive(false);
             Time.timeScale = 1;
             closeButton(true);
         }
@@ -421,6 +424,7 @@ public class master : MonoBehaviour {
         {
             PClick = true;
             PauseButton.GetComponent<Image>().sprite = play;
+            PauseButton.transform.GetChild(0).gameObject.SetActive(true);
             Time.timeScale = 0;
             closeButton(false);
         }
